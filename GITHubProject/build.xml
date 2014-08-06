@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project basedir="." default="all" name="GITHubProject">
+	<!-- NOTE: some of the path definitions need to use \ instead of / or it won't work. -->
+	<property name="lib.name" value="GITHubProject.jar" />
+	<property name="common.lib.dir" value="lib" />
+	<property name="project.classes" value="classes" />
+	<property name="build.output.distribute" value="dist" />
+
+	<!-- START - Library classpath definitions -->
+	<path id="Log4J">
+		<pathelement path="${common.lib.dir}/log4j-1.2.15.jar" />
+	</path>
+	<!-- START - Classpath for Project: may not use all library defs above -->
+	<path id="project.classpath">
+		<path refid="Log4J" />
+	</path>
+
+	<!-- START - Targets -->
+	<target name="Cleanup">
+		<mkdir dir="classes" />
+		<delete includeemptydirs="true" failonerror="false">
+			<fileset dir="classes" includes="**/*" />
+		</delete>
+		<delete file="${lib.name}" failonerror="false" />
+	</target>
+	<target name="Compile" depends="Cleanup">
+		<javac debug="on" srcdir="src" destdir="classes" classpathref="project.classpath" />
+	</target>
+	<target name="Archive" description="JARs the Task" depends="Compile">
+
+		<jar destfile="${build.output.distribute}/${lib.name}">
+			<fileset dir="${project.classes}">
+				<include name="**/*.class" />
+			</fileset>
+		</jar>
+	</target>
+	<target name="all" depends="Cleanup,Compile,Archive" />
+</project>
